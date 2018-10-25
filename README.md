@@ -1,2 +1,2 @@
-# Planificaci-n-de-Robots
+# Planificacion_Robots
 asignatura Máster Robótica
