@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env/python
 
 
 class Node():
@@ -8,15 +8,15 @@ class Node():
         self.parent = parent
         self.position = position
 
-        self.g = 0      # G is the distance between the current node and the start node.
-        self.h = 0      # H is the heuristic — estimated distance from the current node to the end node.
-        self.f = 0      # F is the total cost of the node.
+        self.g = 0
+        self.h = 0
+        self.f = 0
 
     def __eq__(self, other):
         return self.position == other.position
 
 
-def a_star_(graph: object, start: object, end: object) -> object:
+def a_star_(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
     # Create start and end node
@@ -51,25 +51,28 @@ def a_star_(graph: object, start: object, end: object) -> object:
         if current_node == end_node:
             path = []
             current = current_node
+            i = 1
+            print('\n')
             while current is not None:
                 path.append(current.position)
                 current = current.parent
+                # print('STEP ', i, ': ', path)  # -------------->
+                i = i + 1
             return path[::-1]  # Return reversed path
 
         # Generate children
         children = []
-        for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]:  # Adjacent squares
+        for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0), (-1, -1), (-1, 1), (1, -1), (1, 1)]: # Adjacent squares
 
             # Get node position
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
 
             # Make sure within range
-            if node_position[0] > (len(graph) - 1) or node_position[0] < 0 or node_position[1] > (
-                    len(graph[len(graph) - 1]) - 1) or node_position[1] < 0:
+            if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
                 continue
 
             # Make sure walkable terrain
-            if graph[node_position[0]][node_position[1]] != 0:
+            if maze[node_position[0]][node_position[1]] != 0:
                 continue
 
             # Create new node
@@ -88,8 +91,7 @@ def a_star_(graph: object, start: object, end: object) -> object:
 
             # Create the f, g, and h values
             child.g = current_node.g + 1
-            child.h = ((child.position[0] - end_node.position[0]) ** 2) + (
-                        (child.position[1] - end_node.position[1]) ** 2)
+            child.h = ((child.position[0] - end_node.position[0]) ** 2) + ((child.position[1] - end_node.position[1]) ** 2)
             child.f = child.g + child.h
 
             # Child is already in the open list
@@ -99,8 +101,6 @@ def a_star_(graph: object, start: object, end: object) -> object:
 
             # Add the child to the open list
             open_list.append(child)
-
-    return graph
 
     """"
     maze = [[0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
