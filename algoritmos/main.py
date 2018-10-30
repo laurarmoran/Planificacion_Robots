@@ -1,33 +1,23 @@
-#!/usr/bin/env
+#!/usr/bin/env/python
 
+import numpy as np
 
 from read_csv import read_csv
-#from a_star_ import a_star_
-from dijkstra import dijkstra
+from a_star_ import a_star_
+# from a_star_ import Node
+
+# from dijkstra import dijkstra
 
 
 def main():
 
-    graph, start, end = read_csv('map1.csv')
-    # path_a_star_ = a_star_(graph, start, end)
+    reader, start, end = read_csv('map1.csv')
+    path_a_star_ = a_star_(reader, start, end)
 
-    print('\nTHIS IS THE PATH:')
+    print('PATH:')
 
-    delta, previous = dijkstra(graph, start)
-
-    path_dijkstra = []
-    vertex = end
-
-    while vertex is not None:
-        path_dijkstra.append(vertex)
-        vertex = previous[vertex]
-
-        path_dijkstra.reverse()
-    return path_dijkstra
-
-    # print(path_a_star_)
+    print(path_a_star_)
 
 
 if __name__ == '__main__':
     main()
-

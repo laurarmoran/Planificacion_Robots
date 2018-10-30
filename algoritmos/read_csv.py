@@ -1,21 +1,23 @@
-#!/usr/bin/env
+#!/usr/bin/env/python
 
 import csv
+import numpy
 
 
 def read_csv(mapa):
 
     with open(mapa) as myFile:
         reader = csv.reader(myFile)
-        reader = list(reader)   # convert tuple to list
+        reader = list(reader)   # convert tuple to list (list of strings)
+        maze = []       # list of lists
 
-        start = (0, 0)
-        end = (7, 8)
+        start = (1, 1)
+        end = (7, 3)
 
-        print('THIS IS THE MAP: ')
+        print('\nMAP: ')
 
         for row in reader:
-            print(row)
+            maze.append(list(map(int, row)))        # convert to list of lists (lists of integers instead of strings)
+        print(numpy.array(maze))
 
-    return reader, start, end
-
+    return maze, start, end
