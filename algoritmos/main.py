@@ -2,8 +2,7 @@
 
 from read_csv import read_csv
 from a_star_ import a_star_
-
-# from dijkstra import dijkstra
+from dijkstra import dijkstra
 
 
 def choose_algorithm():
@@ -21,6 +20,7 @@ def choose_algorithm():
             # Any integer inputs other than values 1-5 we print an error message
             input("Wrong option selection. Enter any key to try again..")
         break
+    return choice
 
 
 def choose_map():
@@ -29,13 +29,18 @@ def choose_map():
 
 
 def main():
-    choose_algorithm()
-    mapa = choose_map()
-    reader, start, end = read_csv(mapa)
-    path_a_star_ = a_star_(reader, start, end)
+    algorithm_chosen = choose_algorithm()
+    map_chosen = choose_map()
+    mapa, start, end = read_csv(map_chosen)
+    path = []
+
+    if algorithm_chosen == 1:
+        path = a_star_(mapa, start, end)
+    elif algorithm_chosen == 2:
+        path = dijkstra(mapa, start, end)
 
     print('PATH:')
-    print(path_a_star_)
+    print(path)
 
 
 if __name__ == '__main__':

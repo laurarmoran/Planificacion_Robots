@@ -31,6 +31,7 @@ def a_star_(maze, start, end):
 
     # Add the start node
     open_list.append(start_node)
+    print('open_list[0]: ', open_list[0])
 
     # Loop until you find the end
     while len(open_list) > 0:
@@ -70,9 +71,8 @@ def a_star_(maze, start, end):
             # Make sure within range
             if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
                 continue
-
             # Make sure walkable terrain
-            if maze[node_position[0]][node_position[1]] != 0:
+            if maze[node_position[0]][node_position[1]] != 0:   # si el nodo vale 1 vuelve a empezar el for
                 continue
 
             # Create new node

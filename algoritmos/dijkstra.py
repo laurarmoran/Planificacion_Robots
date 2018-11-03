@@ -1,82 +1,136 @@
-import collections
-import math
+#!/usr/bin/env/python
+from typing import List, Any
+
+import numpy
+
+"""
+    Para convertirloi a dijkstra, eliminar la H y continuar el algoritmo no 
+    hasta que encuentra el destino, sino hasta que analiza todos los puntos
+"""""
 
 
-class Graph:
-    """"" graph class inspired by https://gist.github.com/econchick/4666413
+class Node():
+    """A node class for Dijkstra Pathfinding"""
+
+    def __init__(self, g=0, parent=None, position=None):
+        self.parent = parent
+        self.position = position
+        self.g = g
+
+    def __eq__(self, other):
+        return self.position == other.position
+
+
+def take_g(node):
+    return node.g
+
+
+def dijkstra(map, start, end):
+    """Returns a list of tuples as a path from the given start to the given end in the given maze"""
+
+    # Create start and end node
+    start_node = Node(0, None, start)
+    start_node.g = 0
+    end_node = Node(0, None, end)
+    end_node.g = 0
+
     """
-
-    def __init__(self):
-        self.vertices = set()
-
-        # makes the default value for all vertices an empty list
-        self.edges = collections.defaultdict(list)
-        self.weights = {}
-
-    def add_vertex(self, value):
-        self.vertices.add(value)
-
-    def add_edge(self, from_vertex, to_vertex, distance):
-        if from_vertex == to_vertex: pass  # no cycles allowed
-        self.edges[from_vertex].append(to_vertex)
-        self.weights[(from_vertex, to_vertex)] = distance
-
-    def __str__(self):
-        string = "Vertices: " + str(self.vertices) + "\n"
-        string += "Edges: " + str(self.edges) + "\n"
-        string += "Weights: " + str(self.weights)
-        return string
+    # Creates a list containing same amount of lists and items, all set to -1
+    w, h = len(map), len(map)
+    cost_matrix = [[-1 for x in range(w)] for y in range(h)]
+    cost_matrix[start_node.position[0]][start_node.position[1]] = 0
+    """""
 
 
-def dijkstra(graph, start):
-    # initializations
-    S = set()
+    # Initialize stack
+    stack = []  # pila con posiciones
+    visited_nodes = []  # nodes already checked
+    pass    # does nothing. Just to avoid previous line's complaints
 
-    # delta represents the length shortest distance paths from start -> v, for v in delta.
-    # We initialize it so that every vertex has a path of infinity (this line will break if you run python 2)
+    # Creates a list containing same amount of lists and items, all set to -1
+    w, h = len(map), len(map)
+    map_size = w * h
 
-    delta = dict.fromkeys(list(graph.vertices), math.inf)
-    previous = dict.fromkeys(list(graph.vertices), None)
+    node_matrix = []
 
-    # then we set the path length of the start vertex to 0
-    delta[start] = 0
+    node_matrix.append(start_node)
 
-    # while there exists a vertex v not in S
-    while S != graph.vertices:
-        # let v be the closest vertex that has not been visited...it will begin at 'start'
-        v = min((set(delta.keys()) - S), key=delta.get)
+    # Add the start node
+    current_node = start_node
 
-        # for each neighbor of v not in S
-        for neighbor in set(graph.edges[v]) - S:
-            new_path = delta[v] + graph.weights[v, neighbor]
+    for node in range(0, map_size):
+        # Found the goal
+        if current_node == end_node:
+            path = []
+            current = current_node
+            path.append(current.position)
+            while current.parent is not None:
+                for fp in node_matrix:
+                    if fp.position == current.parent:
+                        path.append(fp.position)
+                        current = fp
 
-            # is the new path from neighbor through
-            if new_path < delta[neighbor]:
-                # since it's optimal, update the shortest path for neighbor
-                delta[neighbor] = new_path
+            return path[::-1]  # Return reversed path
 
-                # set the previous vertex of neighbor to v
-                previous[neighbor] = v
-        S.add(v)
+        visited_nodes.append(current_node)
 
-    return (delta, previous)
+        # Generate new_nodes
+        movements = [(0, 1), (1, 1), (1, 0), (1, -1), (0, -1), (-1, -1), (-1, 0), (-1, 1)]
+        for new_position in movements:  # Adjacent squares
+            # Get node position
+            new_node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
+
+            # Make sure within range
+            if new_node_position[0] > (len(map) - 1) or new_node_position[0] < 0 or new_node_position[1] > (    # x dentro del mapa
+                    len(map[len(map) - 1]) - 1) or new_node_position[1] < 0:  # y dentro del mapa
+                continue
+
+            # Make sure walkable terrain
+            if map[new_node_position[0]][new_node_position[1]] != 0:  # si coincide con obstáculo vuelve a empezar el for
+                continue
+
+            stack.append(new_node_position)
+
+            # Check if node is on the visited_node list
+            for visited_node in visited_nodes:
+                if new_node_position == visited_node.position:
+                    stack.pop()
+                else:
+                    # Get node cost
+                    if abs(new_position[0] + new_position[1]) == 1:  # posiciones 0, 2, 4 y 6
+                        cost = 10  # movimiento recto
+                    elif abs(new_position[0] + new_position[1]) == 0 or 2:  # posiciones 1, 3, 5 y 7
+                        cost = 14  # movimiento diagonal
+
+                    # Convert stack items from positions to nodes
+                    new_node_cost = current_node.g + cost
+                    new_node = Node(new_node_cost, current_node.position, new_node_position)
+
+                    j = 0
+                    for i in range(0, len(node_matrix)):
+                        if node_matrix[i].position == new_node_position:
+                            j = j+1
+                            if node_matrix[i].g > new_node_cost:
+                                node_matrix[i] = new_node
+                    if j == 0:
+                        node_matrix.append(new_node)
 
 
-"""""
-# Uses dijkstra function in order to output the shortest path from start to end
+        # Choose next node
+        sorted_matrix = node_matrix.copy()
+        quit_index = []
+        for visited in visited_nodes:
+            for index in range(0, len(sorted_matrix)):
+                if sorted_matrix[index].position == visited.position:
+                    quit_index.append(index)
 
-def shortest_path(graph, start, end):
-    pass
+        """ Ordenar para que al quitar un objeto de la sorted_matrix quite de mayor
+        a menor, porque si quit_index es [6,7,0] y el for está hasta la longitud de
+        quit_index, en cuanto popea el 6, la longitud es menor, y se sale de rango el
+        acceso a la posición 7"""
+        quit_index.sort(reverse=True)
 
-delta, previous = dijkstra(graph, start)
-
-path = []
-vertex = end
-
-while vertex is not None:
-    path.append(vertex)
-    vertex = previous[vertex]
-
-path.reverse()
-return path
-"""""
+        for k in range(0, len(quit_index)):
+            sorted_matrix.pop(quit_index[k])
+        sorted_matrix.sort(key=take_g)
+        current_node = sorted_matrix[0]
