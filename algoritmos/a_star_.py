@@ -2,7 +2,6 @@
 
 
 class Node():
-    """A node class for A* Pathfinding"""
 
     def __init__(self, parent=None, position=None):
         self.parent = parent
@@ -17,7 +16,6 @@ class Node():
 
 
 def a_star_(maze, start, end):
-    """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
     # Create start and end node
     start_node = Node(None, start)
@@ -31,7 +29,6 @@ def a_star_(maze, start, end):
 
     # Add the start node
     open_list.append(start_node)
-    print('open_list[0]: ', open_list[0])
 
     # Loop until you find the end
     while len(open_list) > 0:
@@ -57,8 +54,6 @@ def a_star_(maze, start, end):
             while current is not None:
                 path.append(current.position)
                 current = current.parent
-                # print('STEP ', i, ': ', path)  # -------------->
-                i = i + 1
             return path[::-1]  # Return reversed path
 
         # Generate children
@@ -101,19 +96,3 @@ def a_star_(maze, start, end):
 
             # Add the child to the open list
             open_list.append(child)
-
-    """"
-    maze = [[0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
-            
-    start = (0, 0)
-    end = (7, 6)
-    """""

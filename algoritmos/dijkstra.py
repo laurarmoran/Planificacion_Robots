@@ -10,7 +10,6 @@ import numpy
 
 
 class Node():
-    """A node class for Dijkstra Pathfinding"""
 
     def __init__(self, g=0, parent=None, position=None):
         self.parent = parent
@@ -26,7 +25,6 @@ def take_g(node):
 
 
 def dijkstra(map, start, end):
-    """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
     # Create start and end node
     start_node = Node(0, None, start)
@@ -34,20 +32,12 @@ def dijkstra(map, start, end):
     end_node = Node(0, None, end)
     end_node.g = 0
 
-    """
-    # Creates a list containing same amount of lists and items, all set to -1
-    w, h = len(map), len(map)
-    cost_matrix = [[-1 for x in range(w)] for y in range(h)]
-    cost_matrix[start_node.position[0]][start_node.position[1]] = 0
-    """""
-
-
     # Initialize stack
     stack = []  # pila con posiciones
     visited_nodes = []  # nodes already checked
     pass    # does nothing. Just to avoid previous line's complaints
 
-    # Creates a list containing same amount of lists and items, all set to -1
+    # Calculates map size
     w, h = len(map), len(map)
     map_size = w * h
 

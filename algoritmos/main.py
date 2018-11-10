@@ -5,7 +5,6 @@ from read_csv import read_csv
 from a_star_ import a_star_
 from dijkstra import dijkstra
 from best_first import best_first
-from best_first_ import best_first_
 
 
 def choose_algorithm():
@@ -40,30 +39,22 @@ def main():
     mapa, start, end = read_csv(map_chosen)
     path = []
 
+    start_time = time.time()
     if algorithm_chosen == 1:
         path = a_star_(mapa, start, end)
     elif algorithm_chosen == 2:
         path = dijkstra(mapa, start, end)
     elif algorithm_chosen == 3:
         path = best_first(mapa, start, end)
-    elif algorithm_chosen == 4:
-        path = best_first_(mapa, start, end)
+    end_time = time.time()
 
-    print('PATH:')
+    print('\nPATH:')
     print(path)
+    print('\nPATH has: %s nodes' % (len(path)))
+
+    print("\n--- RUN TIME: ---")
+    print("--- %s ms ---\n" % ((end_time - start_time) * 1000))
 
 
 if __name__ == '__main__':
-    start_time = time.time()
     main()
-    print("\n--- RUN TIME: ---")
-    print("--- %s seconds ---" % (time.time() - start_time))
-
-    # PATH:
-    # [(2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2)]
-    #
-    # --- RUN TIME: ---
-    # --- 4.510892629623413 seconds ---
-
-    # --- RUN TIME: ---
-    # --- 5.804784059524536 seconds ---
