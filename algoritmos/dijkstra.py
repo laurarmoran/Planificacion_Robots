@@ -60,7 +60,7 @@ def dijkstra(map, start, end):
                         path.append(fp.position)
                         current = fp
 
-            return path[::-1]  # Return reversed path
+            return path[::-1],len(visited_nodes)  # Return reversed path
 
         visited_nodes.append(current_node)
 

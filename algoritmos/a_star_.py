@@ -54,7 +54,7 @@ def a_star_(maze, start, end):
             while current is not None:
                 path.append(current.position)
                 current = current.parent
-            return path[::-1]  # Return reversed path
+            return path[::-1],len(closed_list)  # Return reversed path
 
         # Generate children
         children = []

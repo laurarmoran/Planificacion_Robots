@@ -22,7 +22,7 @@ def choose_algorithm():
         elif choice == 3:
              print('Best-First selected')
         else:
-            # Any integer inputs other than values 1-5 we print an error message
+            # Any integer inputs other than values 1-3 we print an error message
             input("Wrong option selection. Enter any key to try again..")
         break
     return choice
@@ -38,16 +38,18 @@ def main():
     map_chosen = choose_map()
     mapa, start, end = read_csv(map_chosen)
     path = []
+    num_visited_nodes = 0
 
     start_time = time.time()
     if algorithm_chosen == 1:
-        path = a_star_(mapa, start, end)
+        path, num_visited_nodes = a_star_(mapa, start, end)
     elif algorithm_chosen == 2:
-        path = dijkstra(mapa, start, end)
+        path, num_visited_nodes = dijkstra(mapa, start, end)
     elif algorithm_chosen == 3:
-        path = best_first(mapa, start, end)
+        path, num_visited_nodes = best_first(mapa, start, end)
     end_time = time.time()
 
+    print('\nAlgorithm has checked: %s nodes' %(num_visited_nodes))
     print('\nPATH:')
     print(path)
     print('\nPATH has: %s nodes' % (len(path)))
@@ -56,5 +58,7 @@ def main():
     print("--- %s ms ---\n" % ((end_time - start_time) * 1000))
 
 
+
 if __name__ == '__main__':
     main()
+    input()
